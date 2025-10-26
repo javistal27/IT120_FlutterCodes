@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+// Function to trigger the build process
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
+
+// Function to launch URL in the browser
+_launchURLBrowser() async {
+  var _url = Uri.parse("https://www.geeksforgeeks.org/");
+  if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
+              throw Exception('Could not launch $_url');
+      }
+}
+
+// Function to launch URL in the app
+_launchURLApp() async {
+  var _url = Uri.parse("https://www.geeksforgeeks.org/");
+  if (!await launchUrl(_url, mode: LaunchMode.inAppWebView)) {
+              throw Exception('Could not launch $_url');
+      }
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Geeks for Geeks'),
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
+        ),
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  height: 250.0,
+                ),
+                const Text(
+                  'Welcome to GFG!',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  height: 20.0,
+                ),
+                ElevatedButton(
+                  onPressed: _launchURLBrowser,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.green),
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
+                  ),
+                  child: const Text('Open in Browser'),
+                ),
+                Container(
+                  height: 20.0,
+                ),
+                ElevatedButton(
+                  onPressed: _launchURLApp,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.green),
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
+                  ),
+                  child: const Text('Open in App'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

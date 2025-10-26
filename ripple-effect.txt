@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final title = 'GeeksForGeeks';
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: title,
+      home: MyHomePage(title: title),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  final String title;
+
+  MyHomePage({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      body: Center(child: MyButton()),
+    );
+  }
+}
+
+class MyButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Hello Geeks!'),
+        ));
+      },
+      child: Container(
+        padding: EdgeInsets.all(12.0),
+        color: Colors.green,
+        child: Text(
+          ' Button',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}

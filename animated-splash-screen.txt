@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_animated_splash/flutter_animated_splash.dart';
+
+// This function triggers the build process
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+	const MyApp({Key? key}) : super(key: key);
+
+	@override
+	Widget build(BuildContext context) {
+		return MaterialApp(
+			debugShowCheckedModeBanner: false,
+			home: AnimatedSplash(
+				type: Transition.fade,
+				curve: Curves.fastEaseInToSlowEaseOut,
+				backgroundColor: Colors.white,
+				navigator: HomePage(),
+				durationInSeconds: 3,
+				child: Image.network(
+					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/GeeksforGeeks.svg/2560px-GeeksforGeeks.svg.png",
+				),
+			),
+		);
+	}
+}
+
+class HomePage extends StatefulWidget {
+	const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+	@override
+	Widget build(BuildContext context) {
+		return Scaffold(
+			appBar: AppBar(
+				backgroundColor: Colors.green,
+				foregroundColor: Colors.white,
+				title: const Text(
+					"GeeksforGeeks",
+				),
+				automaticallyImplyLeading: false,
+			),
+			body: const Center(
+				child: Text(
+					"Welcome to GFG",
+					style: TextStyle(color: Colors.black, fontSize: 30),
+				),
+			),
+		);
+	}
+}

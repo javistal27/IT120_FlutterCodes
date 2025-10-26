@@ -1,0 +1,104 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<List<Photo>> getPhotos(http.Client client) async {
+  final response = await client.get(
+    Uri.parse('https://jsonplaceholder.typicode.com/albums/1/photos'),
+  );
+
+  // Run Photos_parser in a separate isolate.
+  return compute(Photos_parser, response.body);
+}
+
+List<Photo> Photos_parser(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  return parsed.map<Photo>((json) => Photo.fromJson(json)).toList();
+}
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appTitle = 'geeksforgeeks';
+
+    return MaterialApp(
+      title: appTitle,
+      debugShowCheckedModeBanner: false,
+      home: HomePage(title: appTitle),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  final String title;
+
+  HomePage({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+       backgroundColor: Colors.green,
+       foregroundColor: Colors.white, 
+        title: Text(title),
+      ),
+      body: FutureBuilder<List<Photo>>(
+        future: getPhotos(http.Client()),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          return snapshot.hasData
+              ? PhotosList(photos: snapshot.data!)
+              : Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
+
+class PhotosList extends StatelessWidget {
+  final List<Photo> photos;
+
+  PhotosList({super.key, required this.photos});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      itemCount: photos.length,
+      itemBuilder: (context, index) {
+        return Image.network(photos[index].photo_thumbnailUrl);
+      },
+    );
+  }
+}
+
+class Photo {
+  final int photo_id;
+  final String photo_title;
+  final String photo_thumbnailUrl;
+
+  Photo({
+    required this.photo_id,
+    required this.photo_title,
+    required this.photo_thumbnailUrl,
+  });
+
+  factory Photo.fromJson(Map<String, dynamic> json) {
+    return Photo(
+      photo_id: json['id'] as int,
+      photo_title: json['title'] as String,
+      // Option 1: Use the original thumbnailUrl (may not load as expected)
+      // photo_thumbnailUrl: json['thumbnailUrl'] as String,
+
+      // Option 2: Generate a new URL from Picsum using the photo id as a seed.
+      photo_thumbnailUrl: 'https://picsum.photos/seed/$%7Bjson%5B'id']}/150/150',
+    );
+  }
+}

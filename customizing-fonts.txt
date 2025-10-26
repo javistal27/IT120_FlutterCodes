@@ -1,0 +1,34 @@
+// main.dart file after custom font
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Geeks for Geeks'),
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.green,
+        ), // AppBar
+        body: const SafeArea(
+          child: Center(
+            child: Text(
+              'Welcome to GFG!',
+              style: TextStyle(
+                fontFamily: 'Pacifico',
+                fontSize: 40.0,
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),// TextStyle
+            ),//  Text
+          ),// Center
+        ),// SafeArea
+      ),// Scaffold
+    );// MaterialApp
+  }
+}
